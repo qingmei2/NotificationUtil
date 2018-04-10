@@ -1,8 +1,8 @@
-package com.qingmei2.notificationdemo.notify
+package com.github.qingmei2
 
 import com.qingmei2.notificationdemo.notify.entity.Notification
 
 interface INotificationFactory {
 
-    fun provide(): Notification
+    fun provideNotification(): Notification
 }

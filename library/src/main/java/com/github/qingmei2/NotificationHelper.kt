@@ -1,4 +1,4 @@
-package com.qingmei2.notificationdemo.notify
+package com.github.qingmei2
 
 import android.annotation.TargetApi
 import android.app.Application
@@ -15,24 +15,20 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 
 import com.qingmei2.notificationdemo.SecondActivity
-import com.qingmei2.notificationdemo.notify.entity.Channel
 import com.qingmei2.notificationdemo.notify.entity.Notification
 
 class NotificationHelper private constructor(private val application: Application) {
-    private val mNotificationManager: NotificationManager
-    private val channels: Channel? = null
 
-    init {
-        this.mNotificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    }
+    private val mNotificationManager: NotificationManager =
+            application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     fun sendNotification(notification: Notification) {
-        var resultIntent = Intent(application, SecondActivity::class.java)
+        var resultIntent = Intent(application, notification.backStackActivity)
         if (notification.onIntentInit != null)
             resultIntent = notification.onIntentInit!!.onIntentInit(resultIntent)
 
         val stackBuilder = TaskStackBuilder.create(application)
-        stackBuilder.addParentStack(SecondActivity::class.java)
+        stackBuilder.addParentStack(notification.backStackActivity)
         stackBuilder.addNextIntent(resultIntent)
 
         val resultPendingIntent = stackBuilder.getPendingIntent(
@@ -42,11 +38,11 @@ class NotificationHelper private constructor(private val application: Applicatio
 
         val builder: NotificationCompat.Builder
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder = getNotificationBuilder_26(notification)
+        builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getNotificationBuilder26(notification)
                     .setContentIntent(resultPendingIntent)
         } else {
-            builder = getNotificationBuilder_14(notification)
+            getNotificationBuilder14(notification)
                     .setContentIntent(resultPendingIntent)
         }
 
@@ -54,7 +50,7 @@ class NotificationHelper private constructor(private val application: Applicatio
     }
 
     @TargetApi(value = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private fun getNotificationBuilder_14(notification: Notification): NotificationCompat.Builder {
+    private fun getNotificationBuilder14(notification: Notification): NotificationCompat.Builder {
         val builder = NotificationCompat.Builder(application)
                 .setSmallIcon(notification.smallIconRes)
                 .setPriority(notification.priority.importanceBelow25)
@@ -91,7 +87,7 @@ class NotificationHelper private constructor(private val application: Applicatio
     }
 
     @TargetApi(value = Build.VERSION_CODES.O)
-    private fun getNotificationBuilder_26(notification: Notification): NotificationCompat.Builder {
+    private fun getNotificationBuilder26(notification: Notification): NotificationCompat.Builder {
         this.createNotificationChannel(notification)
         return NotificationCompat.Builder(application, notification.channel!!.channelId)
                 .setSmallIcon(notification.smallIconRes)

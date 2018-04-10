@@ -14,8 +14,8 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 
-import com.qingmei2.notificationdemo.SecondActivity
 import com.qingmei2.notificationdemo.notify.entity.Notification
+import java.lang.NullPointerException
 
 class NotificationHelper private constructor(private val application: Application) {
 

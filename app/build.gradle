@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.qingmei2.notificationdemo"
+        applicationId "com.qingmei2.notificationutil"
         minSdkVersion 14
         targetSdkVersion 26
         versionCode 1

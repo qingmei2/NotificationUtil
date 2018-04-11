@@ -1,6 +1,6 @@
 package com.github.qingmei2
 
-import com.qingmei2.notificationdemo.notify.entity.Notification
+import com.github.qingmei2.entity.Notification
 
 interface INotificationFactory {
 

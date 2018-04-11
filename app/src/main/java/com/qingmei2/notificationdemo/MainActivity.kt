@@ -3,9 +3,9 @@ package com.qingmei2.notificationdemo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.github.qingmei2.NotificationHelper
-import com.qingmei2.notificationdemo.notify.entity.Channel
-import com.qingmei2.notificationdemo.notify.entity.Importance
-import com.qingmei2.notificationdemo.notify.entity.Notification
+import com.github.qingmei2.entity.Channel
+import com.github.qingmei2.entity.Importance
+import com.github.qingmei2.entity.Notification
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

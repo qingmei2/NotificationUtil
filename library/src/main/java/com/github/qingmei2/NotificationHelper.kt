@@ -14,7 +14,7 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 
-import com.qingmei2.notificationdemo.notify.entity.Notification
+import com.github.qingmei2.entity.Notification
 import java.lang.NullPointerException
 
 class NotificationHelper private constructor(private val application: Application) {
@@ -82,7 +82,7 @@ class NotificationHelper private constructor(private val application: Applicatio
             setShowBadge(true)
         }
         if (notification.soundRes != 0) {
-            val uri = Uri.parse("android.resource://com.qingmei2.notificationdemo/" + notification.soundRes)
+            val uri = Uri.parse("android.resource://com.qingmei2.notificationutil/" + notification.soundRes)
             channel.setSound(uri, AudioAttributes.Builder().build())
         }
 

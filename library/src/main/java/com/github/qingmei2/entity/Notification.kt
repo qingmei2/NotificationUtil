@@ -1,4 +1,4 @@
-package com.qingmei2.notificationdemo.notify.entity
+package com.github.qingmei2.entity
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -8,7 +8,7 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.RawRes
 import android.support.v4.app.NotificationCompat
 
-class Notification {
+class Notification private constructor(target: Builder) {
 
     var id: Int = 0
 
@@ -107,23 +107,6 @@ class Notification {
      * 兼容Android O以上版本的更新
      */
     var channel: Channel? = Channel.DEFAULT_INSTANCE
-
-    private constructor(target: Builder) {
-        this.id = target.id
-        this.smallIconRes = target.smallIconRes
-        this.title = target.title
-        this.content = target.content
-        this.autoCancel = target.autoCancel
-        this.backStackActivity = target.backStackActivity
-        this.priority = target.priority
-        this.soundRes = target.soundRes
-        this.floatMode = target.floatMode
-        if (target.onIntentInitListener != null)
-            this.onIntentInitListener = target.onIntentInitListener
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && target.channel != null) {
-            this.channel = analyseChannelConfig(target)
-        }
-    }
 
     @TargetApi(value = Build.VERSION_CODES.O)
     private fun analyseChannelConfig(target: Builder): Channel? {
@@ -228,6 +211,23 @@ class Notification {
 
         fun build(): Notification {
             return Notification(this)
+        }
+    }
+
+    init {
+        this.id = target.id
+        this.smallIconRes = target.smallIconRes
+        this.title = target.title
+        this.content = target.content
+        this.autoCancel = target.autoCancel
+        this.backStackActivity = target.backStackActivity
+        this.priority = target.priority
+        this.soundRes = target.soundRes
+        this.floatMode = target.floatMode
+        if (target.onIntentInitListener != null)
+            this.onIntentInitListener = target.onIntentInitListener
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && target.channel != null) {
+            this.channel = analyseChannelConfig(target)
         }
     }
 }

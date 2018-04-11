@@ -1,4 +1,4 @@
-package com.qingmei2.notificationdemo.notify.entity
+package com.github.qingmei2.entity
 
 import android.annotation.TargetApi
 import android.os.Build

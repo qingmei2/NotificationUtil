@@ -1,9 +1,8 @@
 package com.qingmei2.notificationdemo
 
-import android.app.Application
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.github.qingmei2.NotificationHelper
 import com.qingmei2.notificationdemo.notify.entity.Channel
 import com.qingmei2.notificationdemo.notify.entity.Importance
@@ -19,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val application = application
         NotificationHelper.register(application)
 
         val model1 = Notification.Builder()

@@ -59,7 +59,7 @@ class NotificationHelper private constructor(private val application: Applicatio
                 .setAutoCancel(notification.autoCancel)
 
         if (notification.soundRes != 0) {
-            val uri = Uri.parse("android.resource://com.qingmei2.notificationdemo/" + notification.soundRes)
+            val uri = Uri.parse("android.resource://com.qingmei2.notificationutil/" + notification.soundRes)
             builder.setSound(uri)
         }
         return builder

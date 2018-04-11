@@ -99,7 +99,7 @@ class Notification {
     /**
      * 负责传值给其他界面
      */
-    var onIntentInit: OnIntentInit? = null
+    var onIntentInitListener: ((intent: Intent) -> Intent)? = null
 
     /**
      * 通知渠道
@@ -107,8 +107,6 @@ class Notification {
      * 兼容Android O以上版本的更新
      */
     var channel: Channel? = Channel.DEFAULT_INSTANCE
-
-    private constructor()
 
     private constructor(target: Builder) {
         this.id = target.id
@@ -120,8 +118,8 @@ class Notification {
         this.priority = target.priority
         this.soundRes = target.soundRes
         this.floatMode = target.floatMode
-        if (target.onIntentInit != null)
-            this.onIntentInit = target.onIntentInit
+        if (target.onIntentInitListener != null)
+            this.onIntentInitListener = target.onIntentInitListener
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && target.channel != null) {
             this.channel = analyseChannelConfig(target)
         }
@@ -156,7 +154,7 @@ class Notification {
 
         var floatMode = false
 
-        var onIntentInit: OnIntentInit? = null
+        var onIntentInitListener: ((intent: Intent) -> Intent)? = null
 
         /**
          * 通知的id,请保证通知id的唯一性（以用于实现更新、删除指定通知等功能）
@@ -209,8 +207,8 @@ class Notification {
             return this
         }
 
-        fun withOnIntentInit(onIntentInit: OnIntentInit): Builder {
-            this.onIntentInit = onIntentInit
+        fun withOnIntentInitListener(func: ((intent: Intent) -> Intent)): Builder {
+            this.onIntentInitListener = func
             return this
         }
 
@@ -231,10 +229,5 @@ class Notification {
         fun build(): Notification {
             return Notification(this)
         }
-    }
-
-    interface OnIntentInit {
-
-        fun onIntentInit(intent: Intent): Intent
     }
 }

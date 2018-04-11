@@ -24,27 +24,29 @@ class NotificationHelper private constructor(private val application: Applicatio
 
     fun sendNotification(notification: Notification) {
         var resultIntent = Intent(application, notification.backStackActivity)
-        if (notification.onIntentInit != null)
-            resultIntent = notification.onIntentInit!!.onIntentInit(resultIntent)
+
+        if (notification.onIntentInitListener != null)
+            resultIntent = notification.onIntentInitListener!!.invoke(resultIntent)
 
         val stackBuilder = TaskStackBuilder.create(application)
-        stackBuilder.addParentStack(notification.backStackActivity)
-        stackBuilder.addNextIntent(resultIntent)
+                .apply {
+                    addParentStack(notification.backStackActivity)
+                    addNextIntent(resultIntent)
+                }
 
         val resultPendingIntent = stackBuilder.getPendingIntent(
                 0,
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val builder: NotificationCompat.Builder
-
-        builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getNotificationBuilder26(notification)
-                    .setContentIntent(resultPendingIntent)
-        } else {
-            getNotificationBuilder14(notification)
-                    .setContentIntent(resultPendingIntent)
-        }
+        val builder: NotificationCompat.Builder =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getNotificationBuilder26(notification)
+                            .setContentIntent(resultPendingIntent)
+                } else {
+                    getNotificationBuilder14(notification)
+                            .setContentIntent(resultPendingIntent)
+                }
 
         mNotificationManager.notify(notification.id, builder.build())
     }
@@ -72,12 +74,13 @@ class NotificationHelper private constructor(private val application: Applicatio
                 ch!!.channelId,
                 ch.channelName,
                 notification.priority.importanceOver26
-        )
-        channel.importance = notification.priority.importanceOver26
-        channel.description = ch.channelDescription
-        channel.enableLights(true)
-        channel.lightColor = Color.RED
-        channel.setShowBadge(true)
+        ).apply {
+            importance = notification.priority.importanceOver26
+            description = ch.channelDescription
+            enableLights(true)
+            lightColor = Color.RED
+            setShowBadge(true)
+        }
         if (notification.soundRes != 0) {
             val uri = Uri.parse("android.resource://com.qingmei2.notificationdemo/" + notification.soundRes)
             channel.setSound(uri, AudioAttributes.Builder().build())

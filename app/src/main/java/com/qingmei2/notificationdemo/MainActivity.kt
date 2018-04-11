@@ -1,13 +1,11 @@
 package com.qingmei2.notificationdemo
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.github.qingmei2.NotificationHelper
 import com.qingmei2.notificationdemo.notify.entity.Channel
 import com.qingmei2.notificationdemo.notify.entity.Importance
 import com.qingmei2.notificationdemo.notify.entity.Notification
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,11 +27,7 @@ class MainActivity : AppCompatActivity() {
                 .withFloatMode(true)
                 .withChannel(channel)
                 .withBackStackActivity(SecondActivity::class.java)
-                .withOnIntentInit(object : Notification.OnIntentInit {
-                    override fun onIntentInit(intent: Intent): Intent {
-                        return intent.putExtra("name", "jack")
-                    }
-                })
+                .withOnIntentInitListener { it.putExtra("name", "jack") }
                 .build()
 
         val model2 = Notification.Builder()
@@ -46,11 +40,7 @@ class MainActivity : AppCompatActivity() {
                 .withFloatMode(true)
                 .withChannel(channel)
                 .withBackStackActivity(SecondActivity::class.java)
-                .withOnIntentInit(object : Notification.OnIntentInit {
-                    override fun onIntentInit(intent: Intent): Intent {
-                        return intent.putExtra("name", "rose")
-                    }
-                })
+                .withOnIntentInitListener { it.putExtra("name", "rose") }
                 .build()
 
         btn_send.setOnClickListener { NotificationHelper.instance?.sendNotification(model1) }

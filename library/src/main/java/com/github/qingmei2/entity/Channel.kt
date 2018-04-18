@@ -1,4 +1,4 @@
-package com.github.qingmei2.entity
+package cn.com.fenrir_inc.module_core.notify.entity
 
 import android.annotation.TargetApi
 import android.os.Build

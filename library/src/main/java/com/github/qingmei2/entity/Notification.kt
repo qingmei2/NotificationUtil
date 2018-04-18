@@ -1,11 +1,11 @@
-package com.github.qingmei2.entity
+package cn.com.fenrir_inc.module_core.notify.entity
 
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.support.annotation.DrawableRes
-import android.support.annotation.RawRes
 import android.support.v4.app.NotificationCompat
 
 class Notification private constructor(target: Builder) {
@@ -17,6 +17,12 @@ class Notification private constructor(target: Builder) {
      */
     @DrawableRes
     var smallIconRes: Int = 0
+
+    /**
+     * 通知的大图标资源id
+     */
+    @DrawableRes
+    var bigIconRes: Int = 0
 
     /**
      * 通知的title
@@ -74,27 +80,12 @@ class Notification private constructor(target: Builder) {
      *
      * @see Importance.LOW
      */
-    var priority = Importance.HIGH
+    var priority: Importance? = Importance.HIGH
 
     /**
      * 设置通知背景音乐
      */
-    @RawRes
-    var soundRes: Int = 0
-
-    /**
-     * 是否属于浮动通知
-     *
-     *
-     * 可能触发浮动通知的条件示例包括：
-     *
-     *
-     * 用户的 Activity 处于全屏模式中（应用使用 fullScreenIntent），或者
-     *
-     *
-     * 通知具有较高的优先级并使用铃声或振动
-     */
-    var floatMode = false
+    var soundUri: Uri? = null
 
     /**
      * 负责传值给其他界面
@@ -122,6 +113,9 @@ class Notification private constructor(target: Builder) {
         @DrawableRes
         var smallIconRes: Int = 0
 
+        @DrawableRes
+        var bigIconRes: Int = 0
+
         var title: String? = null
 
         var content: String? = null
@@ -130,12 +124,9 @@ class Notification private constructor(target: Builder) {
 
         var backStackActivity: Class<out Activity>? = null
 
-        var priority = Importance.HIGH
+        var priority: Importance? = Importance.HIGH
 
-        @RawRes
-        var soundRes: Int = 0
-
-        var floatMode = false
+        var soundUri: Uri? = null
 
         var onIntentInitListener: ((intent: Intent) -> Intent)? = null
 
@@ -144,68 +135,49 @@ class Notification private constructor(target: Builder) {
          *
          * @see android.app.NotificationManager.notify
          */
-        fun withId(id: Int): Builder {
+        fun withId(id: Int): Builder = apply {
             this.id = id
-            return this
         }
 
         @TargetApi(value = Build.VERSION_CODES.O)
-        fun withChannel(channel: Channel): Builder {
+        fun withChannel(channel: Channel?): Builder = apply {
             this.channel = channel
-            return this
         }
 
-        fun withSmallIconRes(smallIconRes: Int): Builder {
+        fun withSmallIconRes(smallIconRes: Int): Builder = apply {
             this.smallIconRes = smallIconRes
-            return this
         }
 
-        fun withTitle(title: String): Builder {
+        fun withBigIconRes(bigIconRes: Int): Builder = apply {
+            this.bigIconRes = bigIconRes
+        }
+
+        fun withTitle(title: String?): Builder = apply {
             this.title = title
-            return this
         }
 
-        fun withContent(content: String): Builder {
+        fun withContent(content: String?): Builder = apply {
             this.content = content
-            return this
         }
 
-        fun withAutoCancel(autoCancel: Boolean): Builder {
+        fun withAutoCancel(autoCancel: Boolean): Builder = apply {
             this.autoCancel = autoCancel
-            return this
         }
 
-        fun withBackStackActivity(backStackActivity: Class<out Activity>): Builder {
+        fun withBackStackActivity(backStackActivity: Class<out Activity>?): Builder = apply {
             this.backStackActivity = backStackActivity
-            return this
         }
 
-        fun withPriority(priority: Importance): Builder {
+        fun withPriority(priority: Importance?): Builder = apply {
             this.priority = priority
-            return this
         }
 
-        fun withSoundRes(soundRes: Int): Builder {
-            this.soundRes = soundRes
-            return this
+        fun withSoundUri(soundUri: Uri?): Builder = apply {
+            this.soundUri = soundUri
         }
 
-        fun withOnIntentInitListener(func: ((intent: Intent) -> Intent)): Builder {
+        fun withOnIntentInitListener(func: ((intent: Intent) -> Intent)?): Builder {
             this.onIntentInitListener = func
-            return this
-        }
-
-        /**
-         * 必须设置：
-         *
-         *
-         * 用户的 Activity 处于全屏模式中（应用使用 fullScreenIntent），或者
-         *
-         *
-         * 通知具有较高的优先级并使用铃声或振动
-         */
-        fun withFloatMode(floatMode: Boolean): Builder {
-            this.floatMode = floatMode
             return this
         }
 
@@ -222,8 +194,8 @@ class Notification private constructor(target: Builder) {
         this.autoCancel = target.autoCancel
         this.backStackActivity = target.backStackActivity
         this.priority = target.priority
-        this.soundRes = target.soundRes
-        this.floatMode = target.floatMode
+        this.soundUri = target.soundUri
+        this.bigIconRes = target.bigIconRes
         if (target.onIntentInitListener != null)
             this.onIntentInitListener = target.onIntentInitListener
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && target.channel != null) {
